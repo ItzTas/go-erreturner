@@ -13,6 +13,10 @@ function M.get_current_function_signature()
 
 			local types = {}
 			for _, result_node in ipairs(result_nodes) do
+				if result_node:type() == "map_type" then
+					table.insert(types, result_node)
+				end
+
 				local children = result_node:named_children()
 				if #children == 1 then
 					table.insert(types, result_node)
