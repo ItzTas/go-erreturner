@@ -24,7 +24,17 @@ function M.write_if_err_return(return_val) -- @param return_val string
     vim.cmd("silent normal! =")
 end
 
-function M.write_if_err_println_and_error_and_return() end
+function M.write_if_err_println_and_error_and_return(return_val)
+    write_if_err({
+        string.format('fmt.Println("", %s)', settings.error_variable),
+        string.format("return %s", return_val),
+    })
+    vim.cmd("normal! V")
+    vim.cmd("normal! 4j")
+    vim.cmd("normal! =")
+    vim.cmd("normal! 2j")
+    vim.cmd('normal! f"')
+end
 
 return M
 

@@ -19,7 +19,7 @@ local zero_values = {
     float64 = 0.0,
     complex64 = "0 + 0i",
     complex128 = "0 + 0i",
-    bool = false,
+    bool = "false",
     chan = "nil",
     func = "nil",
     any = "nil",
@@ -65,6 +65,10 @@ end
 
 function M.convert_signatures_to_zero_val(signatures) -- @param signatures table<Node>
     local zero_vals = {}
+
+    if not signatures then
+        return {}
+    end
 
     for _, signature in ipairs(signatures) do
         local text = vim.treesitter.get_node_text(signature, 0)

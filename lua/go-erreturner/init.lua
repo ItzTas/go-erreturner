@@ -5,6 +5,18 @@ local write = require("go-erreturner.write")
 
 local M = {}
 
+local function get_payload()
+    local types = trees.get_current_function_signature()
+
+    local zero_vals = convert.convert_signatures_to_zero_val(types)
+
+    if not zero_vals then
+        return ""
+    end
+
+    return table.concat(zero_vals, ", ")
+end
+
 function M.setup(config)
     if not config then
         return
@@ -16,13 +28,11 @@ function M.setup(config)
 end
 
 function M.return_err()
-    local types = trees.get_current_function_signature()
+    write.write_if_err_return(get_payload())
+end
 
-    local zero_vals = convert.convert_signatures_to_zero_val(types)
-
-    local payload = table.concat(zero_vals, ", ")
-
-    write.write_if_err_return(payload)
+function M.println_err()
+    write.write_if_err_println_and_error_and_return(get_payload())
 end
 
 return M
