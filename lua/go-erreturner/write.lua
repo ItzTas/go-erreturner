@@ -4,7 +4,6 @@ local M = {}
 
 local function write_if_err(table_payload)
     local line_number = vim.api.nvim_win_get_cursor(0)[1] + 1
-    print(settings.error_variable)
     local first = string.format("if %s != nil {", settings.error_variable)
     vim.api.nvim_buf_set_lines(0, line_number - 1, line_number - 1, false, { first })
 
@@ -37,4 +36,3 @@ function M.write_if_err_println_and_error_and_return(return_val)
 end
 
 return M
-
