@@ -34,4 +34,6 @@ local err_returner = require("go-erreturner")
 vim.keymap.set("n", "<leader>er", err_returner.return_err)
 
 vim.keymap.set("n", "<leader>el", err_returner.println_err)
+
+vim.keymap.set("n", "<leader>en", err_returner.return_new_err)
 ```
