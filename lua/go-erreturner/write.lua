@@ -23,6 +23,26 @@ function M.write_if_err_return(return_val) -- @param return_val string
     vim.cmd("silent normal! =")
 end
 
+function M.write_if_err_new_error(return_val) -- @param return_val table
+    local new_return_val = {}
+    for _, r in ipairs(return_val) do
+        if r == settings.error_variable then
+            table.insert(new_return_val, 'errors.New("")')
+            goto continue
+        end
+        table.insert(new_return_val, r)
+        ::continue::
+    end
+    local new_return_val_str = table.concat(new_return_val, ", ")
+    write_if_err({ string.format("return %s", new_return_val_str) })
+    vim.cmd("normal! V")
+    vim.cmd("normal! 3j")
+    vim.cmd("silent normal! =")
+    vim.cmd("normal! 2j")
+    vim.fn.search('errors\\.New("")', "W")
+    vim.cmd('normal! f"')
+end
+
 function M.write_if_err_println_and_error_and_return(return_val)
     write_if_err({
         string.format('fmt.Println("", %s)', settings.error_variable),
@@ -32,6 +52,7 @@ function M.write_if_err_println_and_error_and_return(return_val)
     vim.cmd("normal! 4j")
     vim.cmd("normal! =")
     vim.cmd("normal! 2j")
+    vim.fn.search(string.format('fmt.Println("", %s)', settings.error_variable))
     vim.cmd('normal! f"')
 end
 
