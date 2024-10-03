@@ -1,20 +1,29 @@
 local trees = require("go-erreturner.treesitter")
+local convert = require("go-erreturner.convert")
+local settings = require("go-erreturner.settings")
+local write = require("go-erreturner.write")
 
 local M = {}
+
+function M.setup(config)
+    if not config then
+        return
+    end
+
+    if config.error_variable_name then
+        settings.error_variable = config.error_variable_name
+    end
+end
 
 function M.return_err()
     local types = trees.get_current_function_signature()
 
-    local bufnr = vim.api.nvim_get_current_buf()
-    local current_line = vim.api.nvim_win_get_cursor(0)[1]
+    local zero_vals = convert.convert_signatures_to_zero_val(types)
 
-    local lines_to_write = {}
-    for _, type in ipairs(types) do
-        local type_text = type:type()
-        table.insert(lines_to_write, type_text)
-    end
+    local payload = table.concat(zero_vals, ", ")
 
-    vim.api.nvim_buf_set_lines(bufnr, current_line - 1, current_line - 1, false, lines_to_write)
+    write.write_if_err_return(payload)
 end
 
 return M
+
