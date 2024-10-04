@@ -4,7 +4,7 @@ local M = {}
 
 local zero_values = {
     string = '""',
-    rune = "'\\0'",
+    rune = "'\\x00'",
     int = 0,
     int8 = 0,
     int16 = 0,
